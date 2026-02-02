@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<account_names>
+    <account uuid="e5f5541f-3568-410d-8ca2-ae31797222aa" description="" type="Bank" name="Savings" placeholder="false" hidden="false"/>
+    <account uuid="cf699574-07c8-47a9-bf5c-378bd8ae30b0" description="" type="Bank" name="SpecialBank" placeholder="true" hidden="false">
+        <sub>
+            <account uuid="62c5d2df-ba9b-400f-921f-69eb0e87985b" 
+                description="" type="Bank" name="Savings" placeholder="false" hidden="false"/>
+            <account uuid="d1ec7f88-3696-42d2-b72f-8458182aad79" description="" type="Bank" name="Checking" placeholder="false" hidden="false"/>
+        </sub>
+    </account>
+    <account uuid="" description="" type="Asset" name="Items I Own" placeholder="true" hidden="false"/>
+</account_names>
+

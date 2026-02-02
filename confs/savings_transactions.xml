@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<account name="Savings" uuid="">
+	<transactions>
+		<tran uuid="2102462f-3bb6-4c77-a137-f0f4d33793af" credit="123" debit="22" sibling_account_uuid="" memo="Monthly Rent" reconciled="false" date="2025-10-05" />
+		<tran uuid="9fdd0c2e-9bff-4e87-a6a2-045bdeae678c" credit="65400" debit="12300" sibling_account_uuid="" memo="test this thing right here!" reconciled="false" date="2025-10-06" />
+		<tran uuid="70d7ef0d-a940-4a0d-b86d-7bd04355984c" credit="0" debit="42" sibling_account_uuid="" memo="Groceries" reconciled="true" date="2025-10-08" />
+		<tran uuid="861ed224-0217-471d-ad63-1c92541a8db9" credit="3020" debit="8999" sibling_account_uuid="" memo="Streaming Subscription" reconciled="true" date="2025-10-11" />
+		<tran uuid="0b374b61-f9a5-429e-a176-27592a553fbd" credit="421" debit="213" sibling_account_uuid="" memo="Car Repair" reconciled="true" date="2025-10-13" />
+		<tran uuid="0429f81f-a09e-447d-92e5-4cf2e9f39a56" credit="9650" debit="421" sibling_account_uuid="" memo="test" reconciled="true" date="2025-10-14" />
+		<tran uuid="2b4de5d1-57fc-4846-82d3-ddea968a6608" credit="0" debit="11" sibling_account_uuid="" memo="Utilities" reconciled="true" date="2025-10-16" />
+		<tran uuid="a1e039a8-d76d-4d99-89f8-580341315471" credit="0" debit="54300" sibling_account_uuid="" memo="Bonus Payout" reconciled="true" date="2025-01-32" />
+		<tran uuid="8feab768-2e59-4aaf-a67f-b3a55995de3e" credit="3020" debit="5421" sibling_account_uuid="" memo="Pharmacy" reconciled="false" date="2025-10-19" />
+		<tran uuid="ebdf2866-03b3-4131-a1a0-90a42c10c155" credit="0" debit="73000" sibling_account_uuid="" memo="Credit Card Payment" reconciled="true" date="2025-10-20" />
+		<tran memo="" date="" uuid="8461b0e4-0c43-409b-87a8-a0b4ea8c2359" credit="0" debit="0" reconciled="true" />
+		<tran memo="" date="" uuid="8100fdaf-1464-40a6-a116-570ea5c07dc0" credit="0" debit="0" reconciled="true" />
+		<tran memo="" date="" uuid="2e466b43-02bb-485b-bcb9-d69192dacf02" credit="0" debit="0" reconciled="true" />
+	</transactions>
+</account>

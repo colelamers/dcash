@@ -1,0 +1,18 @@
+A = L + OE
+
+| Account        | Debit  | Credit |
+|----------------|--------|--------|
+| Asset          |   +    |   -    |
+| Liability      |   -    |   +    |
+| Owner’s Equity |   -    |   +    |
+| Expense        |   +    |   -    |
+| Income         |   -    |   +    |
+
+
+| Account         | Debit  | Credit |
+|-----------------|--------|--------|
+| Asset           |  +  A  |  -  A  |
+| Liability       |  -  L  |  +  L  |
+| Owner’s Equity  |  - OE  |  + OE  |
+| Expense         |  + OE  |  - OE  |
+| Income          |  - OE  |  + OE  |

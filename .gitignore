@@ -1,0 +1,33 @@
+# Compiled object files
+*.o
+
+# Build directories
+/build/
+/bin/
+/out/
+/logs/
+
+# Editor files
+*.swp
+*.sublime-workspace
+.vscode/
+tags
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# CMake or Makefile artifacts
+CMakeFiles/
+CMakeCache.txt
+Makefile
+
+# Logs
+*.log
+
+# Secrets
+.env
+*.key
+
+# Kdevelop
+*.kdev4
