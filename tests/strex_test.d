@@ -1,13 +1,10 @@
-module strex_test;
+module tests.strex_test;
 
-import std.string;
+import helper.strex;
 import std.stdio;
-// import helper.strex; // Assuming your library is here
 import std.typecons;
-import std.format;
 import std.datetime;
 
-// ANSI Color Codes
 struct Color {
     enum string reset  = "\033[0m";
     enum string red    = "\033[31m";
@@ -15,57 +12,95 @@ struct Color {
     enum string yellow = "\033[33m";
     enum string blue   = "\033[34m";
     enum string cyan   = "\033[36m";
-    enum string white  = "\033[37m";
-    enum string bold   = "\033[1m";
+    enum string white  = "\033[1m";
 }
 
-// Updated helper to print with colors
 void report(T)(string label, T value) {
-    writef("  Checking %s%-35s%s | Value: %s%s%s\n", 
-        Color.cyan, label, Color.reset, 
-        Color.yellow, value, Color.reset);
+    writef("  Checking %-40s | Value: %s%s%s\n", 
+        label, Color.yellow, value, Color.reset);
 }
 
-void main()
-{
-    writefln("%s%sStarting Full Strex Library Tests...%s", Color.bold, Color.blue, Color.reset);
-    writeln("====================================\n");
+void main() {
+    writeln(Color.white, "========================================", Color.reset);
+    writeln(Color.blue, "   STREX LIBRARY: FULL TEST SUITE", Color.reset);
+    writeln(Color.white, "========================================", Color.reset);
 
-    // --- Case Manipulation ---
-    writeln(Color.bold, "--- Testing: Case Manipulation ---", Color.reset);
-    // string prop1 = "hello world".toProper(); // Placeholder for your lib
-    string prop1 = "Hello world"; 
-    report("\"hello world\".toProper()", prop1);
-    assert(prop1 == "Hello world");
+    // 1. Case Manipulation
+    writeln("\n[1] Case Manipulation");
+    string prop = toProper("aLICE iN wONDERLAND");
+    report("toProper(\"aLICE iN wONDERLAND\")", prop);
+    assert(prop == "Alice in wonderland");
+    assert(toProper("") == "");
 
-    writeln(Color.green, "Section PASSED\n", Color.reset);
-
-    // --- Money Helper Tests ---
-    writeln(Color.bold, "--- Testing: Money Helpers ---", Color.reset);
+    // 2. Money Helpers (String/Long conversion)
+    writeln("\n[2] Money & Currency");
     
-    long cents1 = 150; // Mocking "1.50".toLong()
-    report("\"1.50\".toLong()", cents1);
-    assert(cents1 == 150);
+    long l1 = toLong("1.50");
+    report("toLong(\"1.50\")", l1);
+    assert(l1 == 150);
 
-    string numNeg = "-1.50"; 
-    report("-150.toDecimalString()", numNeg);
-    assert(numNeg == "-1.50");
-    
-    writeln(Color.green, "Section PASSED\n", Color.reset);
+    string s1 = convertLongToDecimalString(-150);
+    report("convertLongToDecimalString(-150)", s1);
+    assert(s1 == "-1.50");
 
-    // --- Date/Time Tests ---
-    writeln(Color.bold, "--- Testing: Dates & Formatting ---", Color.reset);
-    
-    string ymd = "20260101";
-    report("testDate.getYMD()", ymd);
-    
-    string badDate = "INVALID DATE";
-    report("\"invalid\".getYMD()", Color.red ~ badDate ~ Color.reset);
-    
-    writeln(Color.green, "Section PASSED\n", Color.reset);
+    long l2 = convertDecimalStringToLong("12.3");
+    report("convertDecimalStringToLong(\"12.3\")", l2);
+    assert(l2 == 1230);
 
-    // --- Final Result ---
-    writeln(Color.bold, Color.white, "================================");
-    writefln("    RESULT: %sALL TESTS PASSED%s     ", Color.green, Color.white);
-    writeln("================================", Color.reset);
+    long l3 = convertDecimalStringToLong("0.999"); // Test truncation logic
+    report("convertDecimalStringToLong(\"0.999\")", l3);
+    assert(l3 == 99);
+
+    // 3. Optional Conversions (Nullable)
+    writeln("\n[3] Optional Conversions");
+    
+    auto nInt = toInt("100");
+    report("toInt(\"100\")", nInt.get);
+    assert(!nInt.isNull && nInt.get == 100);
+
+    auto nBadInt = toInt("abc");
+    report("toInt(\"abc\") isNull", nBadInt.isNull);
+    assert(nBadInt.isNull);
+
+    auto nDouble = toDouble("12.34");
+    report("toDouble(\"12.34\")", nDouble.get);
+    assert(!nDouble.isNull);
+
+    auto nFloat = toFloat("1.2");
+    report("toFloat(\"1.2\")", nFloat.get);
+    assert(!nFloat.isNull);
+
+    // 4. Date and Time (Using D's SimpleString format)
+    // Note: SysTime.fromSimpleString expects "YYYY-Mon-DD HH:MM:SS"
+    writeln("\n[4] Date & Time Formatting");
+    
+    string testDate = "2026-Jan-02 15:30:45";
+    
+    string ymd = getYMD(testDate);
+    report("getYMD(\"2026-Jan-02...\")", ymd);
+    assert(ymd == "20260102");
+
+    string mdy = getMDY(testDate);
+    report("getMDY(...)", mdy);
+    assert(mdy == "01022026");
+
+    string dmy = getDMY(testDate);
+    report("getDMY(...)", dmy);
+    assert(dmy == "02012026");
+
+    string ymdhms = getYMDHMS(testDate);
+    report("getYMDHMS(...)", ymdhms);
+    assert(ymdhms == "2026-01-02 15:30:45");
+
+    string utc = getFullUTC(testDate);
+    report("getFullUTC(...)", utc);
+    // Checking for "UTC" suffix
+    assert(utc[$-3..$] == "UTC");
+
+    string badDate = getYMD("not a date");
+    report("getYMD(\"invalid\")", badDate);
+    assert(badDate == "INVALID DATE");
+
+    writeln("\n", Color.green, "PASSED: All implementation functions verified.", Color.reset);
+    writeln(Color.white, "========================================", Color.reset);
 }

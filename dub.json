@@ -1,0 +1,13 @@
+{
+	"dependencies": {
+		"dxml": "~>0.4.5"
+	},
+	"targetType": "executable",
+	"lflags": [
+		"-lncurses"
+	],
+	"sourcePaths": [
+		"src"
+	],
+	"name": "dcash"
+}

@@ -1,0 +1,6 @@
+// Profile code
+// vgc means check for garbage colleciton
+// -o- means don't output an object file.'
+dmd --DRT-gcopt=profile:1 -vgc -o- src/helper/strex.d 
+
+
