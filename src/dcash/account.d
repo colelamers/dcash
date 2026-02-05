@@ -1,23 +1,22 @@
 module dcash.account;
 
-import std.stdio;
-import std.string;
-import std.array;
-import std.conv;
-import core.sync.mutex;
-import std.file;
-import std.path;
-
-import helper.xml;
-import dcash.window;
-import dcash.parts : HeaderIndexes, ColumnRow, CursorCoordinates;
-import dcash.edit_account;
+static import std.stdio;
+static import std.string;
+static import std.array;
+static import std.conv;
+static import core.sync.mutex;
+static import std.file;
+static import std.path;
+static import helper.xml;
+static import dcash.window;
+static import dcash.parts;
+static import dcash.edit_account;
 
 class Account : Window {
 private:
-    ColumnRow dimensions_;
-    CursorCoordinates coordinates_;
-    Xml xmlConfig_;
+    dcash.parts.ColumnRow dimensions_;
+    dcash.parts.CursorCoordinates coordinates_;
+    helper.xml.Xml xmlConfig_;
     Node[] transactions_;
     int selectedIndex_;
     int top_;
@@ -25,18 +24,18 @@ private:
 
 public:
     this() {
-        dimensions_ = ColumnRow.init;
-        coordinates_ = CursorCoordinates.init;
+        dimensions_ = dcash.parts.ColumnRow.init;
+        coordinates_ = dcash.parts.CursorCoordinates.init;
 
         // Initialize curses window
-        setupWindow(cast(int)HeaderIndexes.kCursor | cast(int)HeaderIndexes.kEcho);
+        setupWindow(cast(int)dcash.parts.HeaderIndexes.kCursor | cast(int)dcash.parts.HeaderIndexes.kEcho);
         int rows, cols;
         getmaxyx(stdscr, rows, cols);
         dimensions_.rows = rows;
         dimensions_.columns = cols;
 
         // Initialize XML
-        xmlConfig_ = new Xml();
+        xmlConfig_ = new helper.xmlXml();
         setXmlTransactions();
         refreshTransactionsXml();
 
@@ -116,13 +115,13 @@ public:
             string key = toLower(col.title);
 
             final switch (col.process) {
-                case ProcessType.kString: 
+                case dcash.parts.ProcessType.kString: 
                     output = t.attributes().get(key, "");
                     break;
-                case ProcessType.kBoolYesNo: 
+                case dcash.parts.ProcessType.kBoolYesNo: 
                     output = (t.attributes().get(key, "n") == "true") ? "y" : "n";
                     break;
-                case ProcessType.kMoney:
+                case dcash.parts.ProcessType.kMoney:
                     output = helper.strex.getMoneyFromDecimal(t.attributes().get(key, "0"));
                     break;
             }

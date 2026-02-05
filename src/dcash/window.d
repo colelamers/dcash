@@ -1,9 +1,8 @@
 module dcash.window;
 
-import dcash.parts;
-import core.stdc.stdint;
-import std.exception : enforce;
-import std.algorithm : min, max;
+static import dcash.parts;
+static import core.stdc.stdint;
+static import std.exception;
 
 // ---------------------------
 // Curses C bindings
@@ -73,10 +72,12 @@ public:
         }
     }
 
-    bool quitKeyCheck() { return inputKey() == KEY_F(1); }
+    bool quitKeyCheck() { 
+        return inputKey() == KEY_F(1);
+    }
 
     void setInputKey() {
-        enforce(currentWindow !is null, "Window not initialized");
+        std.exception.enforce(currentWindow !is null, "Window not initialized");
         inputKey_ = wgetch(currentWindow);
     }
 
@@ -85,10 +86,12 @@ protected:
         initscr();
         cbreak();
         curs_set((flags & parts.kCursor) != 0 ? 1 : 0);
-        if ((flags & parts.kEcho) != 0)
+        if ((flags & parts.kEcho) != 0) {
             echo();
-        else
+        }
+        else {
             noecho();
+        }
     }
 
     void destroyWindow() {
@@ -102,7 +105,8 @@ protected:
     void ensureSelectionVisible() {
         if (selectedIndex < viewStart) {
             viewStart = selectedIndex;
-        } else if (selectedIndex >= viewStart + visibleRows) {
+        } 
+        else if (selectedIndex >= viewStart + visibleRows) {
             viewStart = selectedIndex - visibleRows + 1;
         }
     }
@@ -110,21 +114,47 @@ protected:
     // ---------------------------
     // Getters / Setters
     // ---------------------------
-    int viewStartValue() { return viewStart; }
-    int selectedIndexValue() { return selectedIndex; }
-    int visibleRowsValue() { return visibleRows; }
-    int topValue() { return top; }
-    int renderableRowsValue() { return renderableRows; }
-    int inputKeyValue() { return inputKey_; }
+    int viewStartValue() {
+        return viewStart; 
+    }
+    int selectedIndexValue() {
+        return selectedIndex;
+    }
+    int visibleRowsValue() {
+        return visibleRows;
+    }
+    int topValue() {
+        return top; 
+    }
+    int renderableRowsValue() {
+        return renderableRows; 
+    }
+    int inputKeyValue() { 
+        return inputKey_; 
+    }
 
-    void setViewStart(int n) { viewStart = n; }
-    void setSelectedIndex(int n) { selectedIndex = n; }
-    void setVisibleRows(int n) { visibleRows = n; }
-    void setTop(int n) { top = n; }
-    void setRenderableRows(int n) { renderableRows = n; }
+    void setViewStart(int n) { 
+        viewStart = n; 
+    }
+    void setSelectedIndex(int n) { 
+        selectedIndex = n; 
+    }
+    void setVisibleRows(int n) { 
+        visibleRows = n; 
+    }
+    void setTop(int n) { 
+        top = n; 
+    }
+    void setRenderableRows(int n) { 
+        renderableRows = n; 
+    }
 
-    void setCurrentWindow(WINDOW* w) { currentWindow = w; }
-    WINDOW* getCurrentWindow() { return currentWindow; }
+    void setCurrentWindow(WINDOW* w) { 
+        currentWindow = w; 
+    }
+    WINDOW* getCurrentWindow() {
+        return currentWindow; 
+    }
 
 private:
     WINDOW* currentWindow = null;
@@ -138,13 +168,17 @@ private:
 
     void pageUpKey() {
         selectedIndex -= visibleRows - 1;
-        if (selectedIndex < 0) selectedIndex = 0;
+        if (selectedIndex < 0) {
+            selectedIndex = 0;
+        }
         ensureSelectionVisible();
     }
 
     void pageDownKey() {
         selectedIndex += visibleRows - 1;
-        if (selectedIndex >= renderableRows) selectedIndex = renderableRows - 1;
+        if (selectedIndex >= renderableRows) {
+            selectedIndex = renderableRows - 1;
+        }
         ensureSelectionVisible();
     }
 

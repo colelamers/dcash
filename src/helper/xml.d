@@ -1,16 +1,14 @@
 module helper.xml;
 
-import std.file;
-import std.path;
-import std.array;
-import std.string;
-import std.conv;
-import core.sync.mutex;
-
-import dxml.parser;
-import dxml.dom;
-
-import helper.app_path;
+static import std.file;
+static import std.path;
+static import std.array;
+static import std.string;
+static import std.conv;
+static import core.sync.mutex;
+static import dxml.parser;
+static import dxml.dom;
+static import helper.app_path;
 
 alias Node = DOMEntity!string;
 
@@ -26,8 +24,9 @@ class Xml
     this()
     {
         fullPath = app_path.getFullyQualifiedDirPath(defaultDir());
-        if (!exists(fullPath))
+        if (!exists(fullPath)) {
             mkdirRecurse(fullPath);
+        }
         loadDefault();
     }
 
@@ -35,8 +34,9 @@ class Xml
     this(string path)
     {
         fullPath = path;
-        if (!exists(fullPath))
+        if (!exists(fullPath)) {
             write(path, "");
+        }
         loadFromFile(path);
     }
 
@@ -50,14 +50,15 @@ class Xml
     string getDefaultConf()
     {
         return buildPath(app_path.getFullyQualifiedDirPath(defaultDir()),
-                         app_path.getProjectName() ~ ".xml");
+            app_path.getProjectName() ~ ".xml");
     }
 
     /// Get config path by name
     string getConf(string name)
     {
+        // todo; need to fix because of GC
         return buildPath(app_path.getFullyQualifiedDirPath(defaultDir()),
-                         name ~ ".xml");
+            ~ ".xml");
     }
 
     /// Load default XML
@@ -158,8 +159,9 @@ class Xml
         foreach (c; dom.children)
         {
             walkAttr(c, found, tag, attr, value);
-            if (found.type != EntityType.invalid)
+            if (found.type != EntityType.invalid) {
                 break;
+            }
         }
         return found;
     }
@@ -168,8 +170,9 @@ class Xml
     string[string] getNodeAttributes(Node node)
     {
         string[string] asdf;
-        foreach (a; node.attributes)
+        foreach (a; node.attributes) {
             asdf[a.name] = a.value;
+        }
         return asdf;
     }
 
@@ -177,8 +180,9 @@ class Xml
     string getAttr(Node node, string name, string def = "")
     {
         foreach (a; node.attributes)
-            if (a.name == name)
+            if (a.name == name) {
                 return a.value;
+            }
         return def;
     }
 
@@ -186,9 +190,11 @@ class Xml
     string innerText(Node node)
     {
         string asdf;
-        foreach (c; node.children)
-            if (c.type == EntityType.text)
-                asdf ~= c.text;
+        foreach (c; node.children) {
+            if (c.type == EntityType.text) {
+                asdf ~= c.text; // todo; fix for GC
+            }
+        }
         return asdf;
     }
 
@@ -209,18 +215,21 @@ class Xml
     /// Recursive search for tag
     private void walk(Node n, ref Node[] asdf, string tag)
     {
-        if (n.type == EntityType.elementStart && n.name == tag)
+        if (n.type == EntityType.elementStart && n.name == tag) {
             asdf ~= n;
+        }
 
-        foreach (c; n.children)
+        foreach (c; n.children) {
             walk(c, asdf, tag);
+        }
     }
 
     /// Recursive search for attribute
     private void walkAttr(Node n, ref Node found, string tag, string attr, string value)
     {
-        if (found.type != EntityType.invalid)
+        if (found.type != EntityType.invalid) {
             return;
+        }
 
         if (n.type == EntityType.elementStart && n.name == tag)
         {
@@ -234,7 +243,8 @@ class Xml
             }
         }
 
-        foreach (c; n.children)
+        foreach (c; n.children) {
             walkAttr(c, found, tag, attr, value);
+        }
     }
 }
