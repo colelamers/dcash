@@ -9,7 +9,6 @@ extern (C):
     struct WINDOW;
     int delWin(WINDOW* win);
 
-
 struct Transaction {
     string date;
     string uuid;
@@ -52,6 +51,54 @@ struct HeaderColumnMeta {
     HeaderIndexes index = HeaderIndexes.kERROR_INDEX;
     string title = "";
     ProcessType process = ProcessType.kString;
+}
+
+
+struct EditColumnHeaders {
+    const string field = "FIELD";
+    const string value = "VALUE";
+}
+
+struct Viewport {
+    int top = 0;
+    int visible_rows = 0;
+}
+
+struct ColumnRow {
+    int rows = 0;    // height
+    int columns = 0; // width
+}
+
+struct CursorCoordinates {
+    int y = 0;
+    int x = 0;
+}
+
+enum AppFlags : ubyte {
+    kCursor     = 0x01,
+    kEcho       = 0x02,
+    kBorder     = 0x04,
+    kResizeable = 0x08,
+    kColor      = 0x10,
+    kMouse      = 0x20,
+    kFullScr    = 0x40,
+    kLogging    = 0x80
+}
+
+// assumes ncurses binding provides WINDOW and delwin
+struct WindowDeleter {
+    void opCall(WINDOW* w) nothrow {
+        if (w !is null) {
+            delwin(w);
+        }
+    }
+}
+
+struct CellNcurses {
+    int y = 0;
+    int x = 0;
+    string value = "";
+    string formatter = "";
 }
 
 struct AccountColumnHeaders {
@@ -162,52 +209,5 @@ struct AccountColumnHeaders {
 
         return meta;
     }
-}
-
-struct EditColumnHeaders {
-    const string field = "FIELD";
-    const string value = "VALUE";
-}
-
-struct Viewport {
-    int top = 0;
-    int visible_rows = 0;
-}
-
-struct ColumnRow {
-    int rows = 0;    // height
-    int columns = 0; // width
-}
-
-struct CursorCoordinates {
-    int y = 0;
-    int x = 0;
-}
-
-enum AppFlags : ubyte {
-    kCursor     = 0x01,
-    kEcho       = 0x02,
-    kBorder     = 0x04,
-    kResizeable = 0x08,
-    kColor      = 0x10,
-    kMouse      = 0x20,
-    kFullScr    = 0x40,
-    kLogging    = 0x80
-}
-
-// assumes ncurses binding provides WINDOW and delwin
-struct WindowDeleter {
-    void opCall(WINDOW* w) nothrow {
-        if (w !is null) {
-            delwin(w);
-        }
-    }
-}
-
-struct CellNcurses {
-    int y = 0;
-    int x = 0;
-    string value = "";
-    string formatter = "";
 }
 
