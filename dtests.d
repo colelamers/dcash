@@ -32,7 +32,8 @@ void main() {
 
         if (result.status == 0) {
             passed++;
-        } else {
+        } 
+        else {
             writeln("\n--- Error in ", file.name, " ---");
             writeln(result.output);
             writeln("-------------------------------\n");

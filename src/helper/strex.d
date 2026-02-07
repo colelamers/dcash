@@ -14,7 +14,8 @@ static import std.array;
 static import std.ascii;
 static import std.range;
 
-string toProper(const ref string s)
+string 
+toProper(const ref string s)
 {
     if (std.range.empty(s)) {
         return "";
@@ -27,14 +28,16 @@ string toProper(const ref string s)
 }
 
 /// Money helpers
-long toLong(const ref string s)
+long 
+toLong(const ref string s)
 {
     // Convert string to double and multiply by 100
     double val = std.conv.to!double(s);
     return cast(long) std.math.round(val * 100);
 }
 
-string convertLongToDecimalString(const ref long decimal)
+string 
+convertLongToDecimalString(const ref long decimal)
 {
     bool negative = decimal < 0;
     long absCents = std.math.abs(decimal);
@@ -48,7 +51,8 @@ string convertLongToDecimalString(const ref long decimal)
 // @param s; 
 // @ex; s = "1.23"
 // @returns; 123
-long convertDecimalStringToLong(const ref string s)
+long 
+convertDecimalStringToLong(const ref string s)
 {
     if (s.length == 0) { 
         return 0;
@@ -81,7 +85,8 @@ long convertDecimalStringToLong(const ref string s)
 }
 
 /// Optional conversions
-std.typecons.Nullable!int toInt(const ref string s)
+std.typecons.Nullable!int 
+toInt(const ref string s)
 {
     try
     {
@@ -93,7 +98,8 @@ std.typecons.Nullable!int toInt(const ref string s)
     }
 }
 
-std.typecons.Nullable!double toDouble(const ref string s)
+std.typecons.Nullable!double 
+toDouble(const ref string s)
 {
     try
     {
@@ -105,7 +111,8 @@ std.typecons.Nullable!double toDouble(const ref string s)
     }
 }
 
-std.typecons.Nullable!float toFloat(const ref string s)
+std.typecons.Nullable!float 
+toFloat(const ref string s)
 {
     try
     {
@@ -118,7 +125,8 @@ std.typecons.Nullable!float toFloat(const ref string s)
 }
 
 /// Date/time parsing and formatting
-std.datetime.SysTime parseToSysTime(string dateStr, string fmt)
+std.datetime.SysTime 
+parseToSysTime(string dateStr, string fmt)
 {
     try
     {
@@ -130,7 +138,8 @@ std.datetime.SysTime parseToSysTime(string dateStr, string fmt)
     }
 }
 
-string getYMD(string dateStr)
+string 
+getYMD(string dateStr)
 {
     auto tp = parseToSysTime(dateStr, "%Y%m%d");
     if (tp == std.datetime.SysTime.min) {
@@ -140,7 +149,8 @@ string getYMD(string dateStr)
     return std.format.format("%04d%02d%02d", tp.year, tp.month, tp.day);
 }
 
-string getMDY(string dateStr)
+string 
+getMDY(string dateStr)
 {
     auto tp = parseToSysTime(dateStr, "%m%d%Y");
     if (tp == std.datetime.SysTime.min) {
@@ -150,7 +160,8 @@ string getMDY(string dateStr)
     return std.format.format("%02d%02d%04d", tp.month, tp.day, tp.year);
 }
 
-string getDMY(string dateStr)
+string 
+getDMY(string dateStr)
 {
     auto tp = parseToSysTime(dateStr, "%d%m%Y");
     if (tp == std.datetime.SysTime.min) { 
@@ -160,7 +171,8 @@ string getDMY(string dateStr)
     return std.format.format("%02d%02d%04d", tp.day, tp.month, tp.year);
 }
 
-string getYMDHMS(string dateStr)
+string 
+getYMDHMS(string dateStr)
 {
     auto tp = parseToSysTime(dateStr, "%Y-%m-%d %H:%M:%S");
     if (tp == std.datetime.SysTime.min) { 
@@ -171,7 +183,8 @@ string getYMDHMS(string dateStr)
         tp.year, tp.month, tp.day, tp.hour, tp.minute, tp.second);
 }
 
-string getFullUTC(string dateStr)
+string 
+getFullUTC(string dateStr)
 {
     auto tp = parseToSysTime(dateStr, "%Y-%m-%d %H:%M:%S");
     if (tp == std.datetime.SysTime.min) {

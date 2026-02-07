@@ -1,16 +1,16 @@
-module tcash_core.parts;
+module dcash.parts;
 
-import std.stdio;
-import std.string;
-import std.conv;
-import helper.strex;
+static import std.stdio;
+static import std.string;
+static import std.conv;
+static import helper.strex;
 
 extern (C):
     struct WINDOW;
-    int delWin(WINDOW* win);
+    int delwin(WINDOW* win);
 
 struct Transaction {
-    string date;
+    string date;#00008A
     string uuid;
     long credit;
     long debit;
@@ -75,19 +75,19 @@ struct CursorCoordinates {
 }
 
 enum AppFlags : ubyte {
-    kCursor     = 0x01,
-    kEcho       = 0x02,
-    kBorder     = 0x04,
-    kResizeable = 0x08,
-    kColor      = 0x10,
-    kMouse      = 0x20,
-    kFullScr    = 0x40,
-    kLogging    = 0x80
+    kCursor     = 0x01, // 0000 0001, 001
+    kEcho       = 0x02, // 0000 0010, 002
+    kBorder     = 0x04, // 0000 0100, 004
+    kResizeable = 0x08, // 0000 1000, 008
+    kColor      = 0x10, // 0001 0000, 016
+    kMouse      = 0x20, // 0010 0000, 032
+    kFullScr    = 0x40, // 0100 0000, 064
+    kLogging    = 0x80  // 1000 0000, 128
 }
 
 // assumes ncurses binding provides WINDOW and delwin
 struct WindowDeleter {
-    void opCall(WINDOW* w) nothrow {
+    void opCall(WINDOW* w) {
         if (w !is null) {
             delwin(w);
         }
@@ -102,12 +102,8 @@ struct CellNcurses {
 }
 
 struct AccountColumnHeaders {
-
-    static void SetTransactionField(
-        ref Transaction t,
-        HeaderIndexes index,
-        string buffer
-    ) {
+    static void 
+    SetTransactionField(ref Transaction t, HeaderIndexes index, string buffer) {
         final switch (index) {
             case HeaderIndexes.kDate:
                 t.date = buffer;
@@ -122,20 +118,18 @@ struct AccountColumnHeaders {
                 t.reconciled = (buffer == "y");
                 break;
             case HeaderIndexes.kDebit:
-                t.debit = helper.strex.convert_money_to_num(buffer);
+                t.debit = helper.strex.toLong(buffer);
                 break;
             case HeaderIndexes.kCredit:
-                t.credit = helper.strex.convert_money_to_num(buffer);
+                t.credit = helper.strex.toLong(buffer);
                 break;
-            default:
+           case HeaderIndexes.kERROR_INDEX:
                 break;
         }
     }
 
-    static string GetTransactionField(
-        const ref Transaction t,
-        HeaderIndexes index
-    ) {
+    static string 
+    GetTransactionField(const ref Transaction t, HeaderIndexes index) {
         final switch (index) {
             case HeaderIndexes.kDate:
                 return t.date;
@@ -146,22 +140,24 @@ struct AccountColumnHeaders {
             case HeaderIndexes.kReconciled:
                 return t.reconciled ? "y" : "n";
             case HeaderIndexes.kDebit:
-                return helper.strex.convert_num_to_money(t.debit);
+                return helper.strex.convertLongToDecimalString(t.debit);
             case HeaderIndexes.kCredit:
-                return helper.strex.convert_num_to_money(t.credit);
-            default:
-                return "";
+                return helper.strex.convertLongToDecimalString(t.credit);
+           case HeaderIndexes.kERROR_INDEX:
+                return "ERROR_INDEX_OCCURRED";
         }
     }
 
-    static const(string)[] GetHeaderStrings() {
+    static const(string)[] 
+    GetHeaderStrings() {
         static immutable string[] headers = [
             "DATE", "MEMO", "TRANSFER", "RECONCILED", "DEBIT", "CREDIT"
         ];
         return headers;
     }
 
-    static const(HeaderColumnMeta)[] GetHeaderMeta() {
+    static const(HeaderColumnMeta)[] 
+    GetHeaderMeta() {
         static immutable HeaderColumnMeta[] meta = [
             HeaderColumnMeta(
                 1,
@@ -206,7 +202,6 @@ struct AccountColumnHeaders {
                 ProcessType.kMoney
             )
         ];
-
         return meta;
     }
 }
