@@ -10,7 +10,7 @@ extern (C):
     int delwin(WINDOW* win);
 
 struct Transaction {
-    string date;#00008A
+    string date;
     string uuid;
     long credit;
     long debit;

@@ -28,12 +28,17 @@ public:
         loadXml();
     }
 private:
-    enum string fileType = ".xml"; // compile-time constant
-    enum string defaultDir_ = "confs"; // compile-time constant
+    enum string fileType = ".xml";
+    enum string defaultDir_ = "confs";
     string fullPath_;
     string docText_;
-    dxml.parser.EntityRange!(xmlConfig, string) xml_;
-    auto x = 0;
+    enum Config xmlConfig_ = makeConfig(
+        SkipComments.yes,
+        SkipPI.yes,
+        SplitEmpty.yes,
+        ThrowOnEntityRef.yes
+    );
+    dxml.parser.EntityRange!(typeof(xmlConfig_), R) xml_;
     string getDefaulConfig(string configDirName) {
         
     }
@@ -45,13 +50,8 @@ private:
         // Effectively the same thing as 
         // > dxml.parser.simpleXml
         // but I want to be explicit
-        enum Config xmlConfig = makeConfig(
-            SkipComments.yes,
-            SkipPI.yes,
-            SplitEmpty.yes,
-            ThrowOnEntityRef.yes
-        );
-        xml_ = parseXML(xmlConfig, this.docText_);
+        
+        this.xml_ = dxml.parser.parseXML(this.xmlConfig_, this.docText_);
     }
     
     string loadDefault() {
