@@ -29,6 +29,7 @@ createFile(string fullyQualifiedFilePath) {
     }
 
     if (!std.file.exists(absPath)) {
+        // Add dummy file
         std.file.write(absPath, "");
     }
 }

@@ -4,3 +4,12 @@
 dmd --DRT-gcopt=profile:1 -vgc -o- src/helper/strex.d 
 
 dmd -Isrc --DRT-gcopt=profile:1 -vgc -o- src/dcash/parts.d 
+
+dmd -Isrc -I$HOME/.dub/packages/dxml/0.4.5/dxml/source \
+    -L-L$HOME/.dub/packages/dxml/0.4.5/dxml \
+    -L-ldxml \
+    --DRT-gcopt=profile:1 -vgc -o xml src/helper/xml.d
+
+dub build --compiler=ldc --arch=x86_64 --build=./my_build_dir
+dub build --build=./build/debug --compiler=ldc
+dub build --build=./build/release --compiler=ldc

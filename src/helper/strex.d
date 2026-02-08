@@ -15,7 +15,7 @@ static import std.ascii;
 static import std.range;
 
 string 
-toProper(const ref string s)
+toProper(string s)
 {
     if (std.range.empty(s)) {
         return "";
@@ -27,9 +27,8 @@ toProper(const ref string s)
     return std.exception.assumeUnique(buf);
 }
 
-/// Money helpers
 long 
-toLong(const ref string s)
+toLong(string s)
 {
     // Convert string to double and multiply by 100
     double val = std.conv.to!double(s);
@@ -37,7 +36,7 @@ toLong(const ref string s)
 }
 
 string 
-convertLongToDecimalString(const ref long decimal)
+convertLongToDecimalString(long decimal)
 {
     bool negative = decimal < 0;
     long absCents = std.math.abs(decimal);
@@ -52,7 +51,7 @@ convertLongToDecimalString(const ref long decimal)
 // @ex; s = "1.23"
 // @returns; 123
 long 
-convertDecimalStringToLong(const ref string s)
+convertDecimalStringToLong(string s)
 {
     if (s.length == 0) { 
         return 0;
@@ -84,9 +83,8 @@ convertDecimalStringToLong(const ref string s)
 //    return (dollars * 100) + cents;
 }
 
-/// Optional conversions
 std.typecons.Nullable!int 
-toInt(const ref string s)
+toInt(string s)
 {
     try
     {
@@ -99,7 +97,7 @@ toInt(const ref string s)
 }
 
 std.typecons.Nullable!double 
-toDouble(const ref string s)
+toDouble(string s)
 {
     try
     {
@@ -112,7 +110,7 @@ toDouble(const ref string s)
 }
 
 std.typecons.Nullable!float 
-toFloat(const ref string s)
+toFloat(string s)
 {
     try
     {
@@ -128,6 +126,8 @@ toFloat(const ref string s)
 std.datetime.SysTime 
 parseToSysTime(string dateStr, string fmt)
 {
+    // todo; this whole date sytem can get revised. no need for this excessive
+    // complexity...
     try
     {
         return std.datetime.SysTime.fromSimpleString(dateStr);
