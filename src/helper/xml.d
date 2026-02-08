@@ -18,8 +18,11 @@ public:
         if (!std.file.exists(fullPath())) {
             helper.app_path.createFile(fullPath());
         }
+        setStAXParser(false);
         setXml();
     }
+
+
 
     void
     setFullyQualifiedXmlFilePath(string fullyQualifiedXmlFilePath) {
@@ -41,9 +44,9 @@ public:
         return this.fullPath_;
     }
 
-    dxml.parser.EntityRange!(xmlConfig_, string)
-    xml() {
-        return this.xml_;
+    dxml.dom.DOMEntity!(string)
+    xmlDom() {
+        return this.xmlDom_;
     }
 
     dxml.parser.Config
@@ -71,10 +74,40 @@ private:
         dxml.parser.SplitEmpty.yes,
         dxml.parser.ThrowOnEntityRef.yes
     );
+    bool isStAXParser_ = false;
     string fullPath_;
     string fullyQualifiedXmlFilePath_;
     string docText_;
-    dxml.parser.EntityRange!(xmlConfig_, string) xml_;
+    dxml.dom.DOMEntity!(string) xmlDom_;
+
+// ################################## UNUSED ##################################
+//  Adding in case I start using stAX traversal but until that time
+// just leaving private out for now.
+    dxml.parser.EntityRange!(xmlConfig_, string) xmlStAX_;
+
+    void
+    setStAXParser(bool stAXParsing) {
+        // Basically this you have to manually parse the XML
+        // line by line. Because it's stream based, it's fast and memory
+        // efficient. Keep it false until you find a need for it. Otherwise
+        // dom should do the trick.
+        this.isStAXParser_ = stAXParsing;
+    }
+
+    bool
+    isStAXParser() {
+        return this.isStAXParser_;
+    }
+
+    dxml.parser.EntityRange!(xmlConfig_, string)
+    xmlStAX() {
+        // Basically this you have to manually parse the XML
+        // line by line. Because it's stream based, it's fast and memory
+        // efficient. Keep it false until you find a need for it. Otherwise
+        // dom should do the trick.
+        return this.xmlStAX_;
+    }
+// ################################## UNUSED ##################################
 
     void 
     setDocTextFromFullFilePath() {
@@ -95,10 +128,16 @@ private:
     setXml() {
         // Basically read file once. Could become expensive space-wise
         // so may want to change this in the future.
-        // NOTE: You need to directly access this.xmlConfig_ because that is
+
+        // NOTE: You need to directly access this.xmlConfig_ because that is a
         //       compile time constant. Accessing via xmlConfig() is runtime and
-        //       that is not allowed in templates.
-        this.xml_ = dxml.parser.parseXML!(this.xmlConfig_)(docText());
+        //       that is not allowed in templates. You can also just ignore
+        //       having the enum private member altogether and just pass it in.
+        // if (stAXParser()) {
+        //    this.xmlStAX_ = dxml.parser.parseXML!(this.xmlConfig_)(docText());
+        // }
+        // else {
+        this.xmlDom_ = dxml.dom.parseDOM!(this.xmlConfig_)(docText());
+        // }
     }
-    
 }
